@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lang_translator/languages.dart';
+import 'package:lang_translator/textfield.dart';
 import 'package:translator/translator.dart';
 
 void main() {
@@ -17,15 +18,15 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  TextEditingController inputController= TextEditingController();
   TextEditingController outputController =
       TextEditingController(text: "Result Goes here");
   final translator = GoogleTranslator();
-  String inputText = '';
   String inputLanguage = 'en';
   String outputLanguage = 'fr';
   Future<void> transalteText() async {
     final translated = await translator.translate(
-      inputText,
+      inputController.text,
       from: inputLanguage,
       to: outputLanguage,
     );
@@ -63,20 +64,10 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 20,
             ),
-            TextField(
-              style: const TextStyle(
-                fontSize: 20,
-              ),
-              decoration: InputDecoration(
-                  hintText: 'Enter text to translate',
-                  border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(2))),
+            TextFieldArea(
               maxLines: 5,
-              onChanged: (value) {
-                setState(() {
-                  inputText = value;
-                });
-              },
+              hintText: "Enter text to translate",
+              Controller: inputController,
             ),
             const SizedBox(
               height: 16,
@@ -131,14 +122,10 @@ class _HomePageState extends State<HomePage> {
             const SizedBox(
               height: 16,
             ),
-            TextField(
+            TextFieldArea(
+              Controller: outputController,
               readOnly: true,
-              style: const TextStyle(fontSize: 20),
               maxLines: 8,
-              controller: outputController,
-              decoration: const InputDecoration(
-                border: OutlineInputBorder(),
-              ),
             )
           ],
         ),
